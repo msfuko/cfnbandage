@@ -1,0 +1,45 @@
+{
+  "Resources": {
+    "myAppInstance1": {
+      "Type": "AWS::OpsWorks::Instance",
+      "Properties": {
+        "AutoScalingType": "load",
+        "StackId": {
+          "Ref": "CSStack"
+        },
+        "LayerIds": [
+          {
+            "Ref": "AppLayer"
+          }
+        ],
+        "InstanceType": {
+          "Ref": "EC2InstanceClass"
+        },
+        "SshKeyName": {
+          "Ref": "KeyPair"
+        }
+      }
+    },
+    "LoadBasedAutoScalingConfigurations1": {
+      "Type": "AWS::OpsWorks::LoadBasedAutoScalingConfigurations",
+      "Properties": {
+        "UpScaling": {
+          "IgnoreMetricsTime": 5,
+          "InstanceCount": 2,
+          "LoadThreshold": 70,
+          "ThresholdsWaitTime": 5
+        },
+        "Enable": "True",
+        "LayerId":  {
+            "Ref": "AppLayer"
+         },
+        "DownScaling": {
+          "IgnoreMetricsTime": 10,
+          "InstanceCount": 20,
+          "LoadThreshold": 30,
+          "ThresholdsWaitTime": 10
+        }
+      }
+    }
+  }
+}

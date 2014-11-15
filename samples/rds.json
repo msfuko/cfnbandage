@@ -1,0 +1,16 @@
+{
+  "Resources": {
+    "Type": "AWS::OpsWorks::UpdateDataSource",
+    "DocUrl": "http://docs.aws.amazon.com/opsworks/latest/APIReference/API_DataSource.html",
+    "Properties": {
+      "AppId": "string",
+      "DataSources": [
+        {
+          "Arn": "",
+          "DatabaseName": "omnibus",
+          "Type": "RdsDbInstance"
+        }
+      ]
+    }
+  }
+}

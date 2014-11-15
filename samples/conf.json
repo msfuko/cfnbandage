@@ -1,0 +1,13 @@
+{
+  "Stack": {
+    "Version": "2014-07-16",
+    "Service": "HAPPY",
+    "Name": "HAPPY STACK",
+    "Region": "us-west-1",
+    "Parameters": {
+      "EC2InstanceClass": "m3.medium",
+      "SystemName": "HAPPY",
+      "KeyPair": "cs-us-west-1"
+    }
+  }
+}
