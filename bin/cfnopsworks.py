@@ -9,7 +9,7 @@ from cfnbandage.cfnbandage import CfnBandage
 from cfnbandage.stack import StackSetting
 
 
-def main(template, conf, patch_file):
+def main(template, cfn_stack_id, conf, patch_file):
 
     bandage = CfnBandage()
 
@@ -20,13 +20,18 @@ def main(template, conf, patch_file):
     stack = StackSetting(**config)
     stack.validate()
 
-    # get cloudformation template and create
-    with open(template, 'r') as f:
-        cfn_template = f.read()
-    #cfn_stack_id = bandage.create_stack(stack.Stack['Region'], stack.Stack['Name'],
-    #                                    cfn_template, stack.Stack['Parameters'])
-    cfn_stack_id = "arn:aws:cloudformation:us-west-1:007588840706:stack/tt/8e536a10-5383-11e4-9e2a-5044330dbaa6"
+    if template:
+        # get cloudformation template and create
+        with open(template, 'r') as f:
+            cfn_template = f.read()
+        cfn_stack_id = bandage.create_stack(stack.Stack['Region'], stack.Stack['Name'],
+                                            cfn_template, stack.Stack['Parameters'])
+    elif cfn_stack_id:
+        pass
+    else:
+        raise ValueError("Cannot identify CloudFormation Stack ID")
 
+    logger.debug("CloudFormation Stack Id %s", cfn_stack_id)
     if patch_file:
         with open(patch_file, 'r') as f:
             patch_template = f.read()
@@ -38,7 +43,8 @@ def main(template, conf, patch_file):
 if __name__ == '__main__':
     # args
     parser = argparse.ArgumentParser(description='Cloudformation with OpsWorks')
-    parser.add_argument("-t", "--template", type=str, help="cloudformation template", required=True)
+    parser.add_argument("-t", "--template", type=str, help="cloudformation template", required=False)
+    parser.add_argument("-i", "--id", type=str, help="cloudformation stack id", required=False)
     parser.add_argument("-c", "--config", type=str, help="config template", required=True)
     parser.add_argument("-p", "--patch", type=str, help="patch template", required=False)
 
@@ -49,5 +55,5 @@ if __name__ == '__main__':
     # parse args
     args = parser.parse_args()
 
-    main(args.template, args.config, args.patch)
+    main(args.template, args.id, args.config, args.patch)
 
